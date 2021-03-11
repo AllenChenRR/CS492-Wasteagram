@@ -20,12 +20,15 @@ class ListScreenState extends State<ListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         // TODO: Need to make title include the number of wasted items
-        appBar: AppBar(centerTitle: true, title: Text(title)),
+        appBar: AppBar(
+            automaticallyImplyLeading: false,
+            centerTitle: true,
+            title: Text(title)),
         body: Column(children: [
           Flexible(child: listStream(context)),
           Flexible(
               child: Align(
-                  alignment: Alignment.bottomCenter, child: cameraFab(context)))
+                  alignment: Alignment(0, 0.9), child: cameraFab(context)))
         ]));
   }
 }

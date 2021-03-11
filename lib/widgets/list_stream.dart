@@ -5,7 +5,7 @@ import 'package:wasteagram/components.dart';
 StreamBuilder listStream(BuildContext context) {
   return StreamBuilder(
       builder: (content, snapshot) {
-        if (snapshot.hasData) {
+        if (!snapshot.data.documents.isEmpty) {
           return ListView.builder(
               itemCount: snapshot.data.documents.length,
               itemBuilder: (context, index) {
@@ -14,10 +14,13 @@ StreamBuilder listStream(BuildContext context) {
                     trailing: Text(post['count'].toString(),
                         textDirection: TextDirection.ltr,
                         style: TextStyle(fontSize: 25)),
-                    title: Text(convertToDate(post['submission_date'])));
+                    title: Text(convertToDate(post['date'])));
               });
         } else {
-          return Center(child: CircularProgressIndicator());
+          return Center(
+              child: CircularProgressIndicator(
+                  backgroundColor: Colors.white,
+                  valueColor: AlwaysStoppedAnimation(Colors.red)));
         }
       },
       stream: FirebaseFirestore.instance.collection('posts').snapshots());

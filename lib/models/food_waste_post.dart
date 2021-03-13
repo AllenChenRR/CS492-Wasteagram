@@ -9,10 +9,10 @@ class FoodWastePost {
   double latitude;
 
   FoodWastePost(
-      {this.quantity, this.date, this.url, this.latitude, this.longitude});
+      {this.quantity, this.url, this.date, this.latitude, this.longitude});
 
   String get weekdayDate {
-    return convertToDate(Timestamp.fromDate(date));
+    return convertToShortDate(Timestamp.fromDate(date));
   }
 
   int get count {
@@ -35,6 +35,14 @@ class FoodWastePost {
     return latitude;
   }
 
+  String get path {
+    return url;
+  }
+
+  set path(String pathUrl) {
+    this.url = pathUrl;
+  }
+
   Map<String, dynamic> get mappedValues {
     return {
       'quantity': quantity,
@@ -42,5 +50,9 @@ class FoodWastePost {
       'url': url,
       'location': GeoPoint(latitude, longitude)
     };
+  }
+
+  String toString() {
+    return 'quantity: $quantity, date: $date, url: $url, longitude: $longitude, latitude: $latitude';
   }
 }

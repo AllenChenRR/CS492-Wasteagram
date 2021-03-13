@@ -1,20 +1,11 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
+import 'package:path/path.dart' as Path;
 import 'package:wasteagram/models.dart';
 import 'package:wasteagram/widgets.dart';
-
-class PostEntry {
-  DateTime date;
-  String url;
-  double longitude;
-  double latitude;
-  int quantity;
-  String toString() {
-    return 'date: $date, url: $url, long: $longitude lat: $latitude, quant: $quantity';
-  }
-}
 
 class NewPostScreen extends StatefulWidget {
   final File file;
@@ -29,7 +20,6 @@ class NewPostScreenState extends State<NewPostScreen> {
   final title = 'New Post';
   Image image;
   LocationData locationData;
-  final post = PostEntry();
   FoodWastePost wastePost;
 
   final formKey = GlobalKey<FormState>();
@@ -40,7 +30,6 @@ class NewPostScreenState extends State<NewPostScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print('newpost screen: ${widget.file.toString()}');
     if (locationData == null) {
       return Center(child: customProgressIndicator());
     }
@@ -77,11 +66,11 @@ class NewPostScreenState extends State<NewPostScreen> {
               },
               onSaved: (value) {
                 wastePost = FoodWastePost(
-                    date: DateTime.now(),
-                    quantity: int.parse(value),
-                    latitude: locationData.latitude,
-                    longitude: locationData.longitude,
-                    url: widget.file.toString());
+                  date: DateTime.now(),
+                  quantity: int.parse(value),
+                  latitude: locationData.latitude,
+                  longitude: locationData.longitude,
+                );
               },
             )));
   }
@@ -122,9 +111,20 @@ class NewPostScreenState extends State<NewPostScreen> {
             child: ButtonTheme.fromButtonThemeData(
                 data: ButtonThemeData(),
                 child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (formKey.currentState.validate()) {
                         formKey.currentState.save();
+                        StorageReference storageReference = FirebaseStorage
+                            .instance
+                            .ref()
+                            .child(Path.basename(DateTime.now()
+                                .millisecondsSinceEpoch
+                                .toString()));
+                        StorageUploadTask uploadTask =
+                            storageReference.putFile(widget.file);
+                        await uploadTask.onComplete;
+                        final url = await storageReference.getDownloadURL();
+                        wastePost.path = url;
                         widget.firestore
                             .collection('posts')
                             .add(wastePost.mappedValues);

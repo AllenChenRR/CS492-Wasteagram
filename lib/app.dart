@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
-// import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:wasteagram/screens.dart';
 
 class App extends StatefulWidget {
+  final FirebaseFirestore firestore;
   @override
   AppState createState() => AppState();
 
-  App({Key key}) : super(key: key);
+  App({
+    Key key,
+    this.firestore,
+  }) : super(key: key);
 }
 
 class AppState extends State<App> {
@@ -21,6 +25,6 @@ class AppState extends State<App> {
     return MaterialApp(
         themeMode: ThemeMode.dark,
         darkTheme: ThemeData(brightness: Brightness.dark),
-        home: ListScreen());
+        home: ListScreen(firestore: widget.firestore));
   }
 }

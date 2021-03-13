@@ -1,9 +1,13 @@
+import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:wasteagram/components.dart';
 import 'package:wasteagram/widgets.dart';
-//import 'package:wasteagram/screens.dart';
 
 class ListScreen extends StatefulWidget {
-  const ListScreen({Key key}) : super(key: key);
+  final FirebaseFirestore firestore;
+  const ListScreen({Key key, this.firestore}) : super(key: key);
 
   @override
   ListScreenState createState() => ListScreenState();
@@ -16,10 +20,12 @@ class ListScreenState extends State<ListScreen> {
     super.initState();
   }
 
+  File image;
+  final picker = ImagePicker();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        // TODO: Need to make title include the number of wasted items
         appBar: AppBar(
             automaticallyImplyLeading: false,
             centerTitle: true,
@@ -28,7 +34,23 @@ class ListScreenState extends State<ListScreen> {
           Flexible(child: listStream(context)),
           Flexible(
               child: Align(
-                  alignment: Alignment(0, 0.9), child: cameraFab(context)))
+                  alignment: Alignment(0, 0.9),
+                  child: cameraFab(context, image)))
         ]));
+  }
+
+  FloatingActionButton cameraFab(BuildContext context, File image) {
+    return FloatingActionButton(
+        onPressed: () {
+          getImage();
+        },
+        child: Icon(Icons.camera_alt));
+  }
+
+  void getImage() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    image = File(pickedFile.path);
+    setState(() {});
+    pushNewPostScreen(context, image, widget.firestore);
   }
 }

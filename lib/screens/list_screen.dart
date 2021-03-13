@@ -15,9 +15,10 @@ class ListScreen extends StatefulWidget {
 
 class ListScreenState extends State<ListScreen> {
   final title = 'Wasteagram';
-
+  int count;
   void initState() {
     super.initState();
+    count = 0;
   }
 
   File image;
@@ -31,7 +32,7 @@ class ListScreenState extends State<ListScreen> {
             centerTitle: true,
             title: Text(title)),
         body: Column(children: [
-          Flexible(child: listStream(context)),
+          Flexible(child: ListStream()),
           Flexible(
               child: Align(
                   alignment: Alignment(0, 0.9),
@@ -52,5 +53,11 @@ class ListScreenState extends State<ListScreen> {
     image = File(pickedFile.path);
     setState(() {});
     pushNewPostScreen(context, image, widget.firestore);
+  }
+
+  void updateCount(int newCount) {
+    setState(() {
+      count = newCount;
+    });
   }
 }

@@ -17,7 +17,6 @@ class DetailedPostScreenState extends State<DetailedPostScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.post.toString());
     return Scaffold(
         appBar: AppBar(centerTitle: true, title: Text(title)),
         body: Column(

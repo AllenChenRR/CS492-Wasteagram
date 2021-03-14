@@ -117,7 +117,7 @@ class NewPostScreenState extends State<NewPostScreen> {
                         final url = await storageReference.getDownloadURL();
                         wastePost.path = url;
                         widget.firestore
-                            .collection('posts')
+                            .collection("posts")
                             .add(wastePost.mappedValues);
                         Navigator.of(context).pop();
                       }

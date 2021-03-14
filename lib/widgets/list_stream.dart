@@ -60,6 +60,9 @@ class ListStreamState extends State<ListStream> {
             return Center(child: customProgressIndicator());
           }
         },
-        stream: FirebaseFirestore.instance.collection('posts').snapshots());
+        stream: FirebaseFirestore.instance
+            .collection('posts')
+            .orderBy("date", descending: true)
+            .snapshots());
   }
 }

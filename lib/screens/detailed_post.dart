@@ -44,6 +44,6 @@ class DetailedPostScreenState extends State<DetailedPostScreen> {
             child: FractionallySizedBox(
                 heightFactor: 0.5,
                 widthFactor: 1,
-                child: Image.network(widget.post.url))));
+                child: Semantics(child: Image.network(widget.post.url)))));
   }
 }

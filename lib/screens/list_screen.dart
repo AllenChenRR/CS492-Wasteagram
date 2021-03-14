@@ -36,7 +36,11 @@ class ListScreenState extends State<ListScreen> {
           Flexible(
               child: Align(
                   alignment: Alignment(0, 0.9),
-                  child: cameraFab(context, image)))
+                  child: Semantics(
+                    child: cameraFab(context, image),
+                    button: true,
+                    onTapHint: 'Select an image from the image gallery',
+                  )))
         ]));
   }
 

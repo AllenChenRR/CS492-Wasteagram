@@ -44,7 +44,11 @@ class NewPostScreenState extends State<NewPostScreen> {
                     flexibleImage(),
                     postFormField(),
                   ]))),
-          saveButton(formKey, context)
+          Semantics(
+            child: saveButton(formKey, context),
+            onTapHint: 'Uploads post',
+            button: true,
+          )
         ]));
   }
 
@@ -52,26 +56,30 @@ class NewPostScreenState extends State<NewPostScreen> {
     return Flexible(
         child: Padding(
             padding: const EdgeInsets.all(8),
-            child: TextFormField(
-              style: TextStyle(fontSize: 30),
-              textAlign: TextAlign.center,
-              decoration:
-                  const InputDecoration(hintText: 'Number of Wasted Items'),
-              validator: (value) {
-                if (value.isEmpty) {
-                  return 'Please enter a value';
-                } else {
-                  return null;
-                }
-              },
-              onSaved: (value) {
-                wastePost = FoodWastePost(
-                  date: DateTime.now(),
-                  quantity: int.parse(value),
-                  latitude: locationData.latitude,
-                  longitude: locationData.longitude,
-                );
-              },
+            child: Semantics(
+              child: TextFormField(
+                style: TextStyle(fontSize: 30),
+                textAlign: TextAlign.center,
+                decoration:
+                    const InputDecoration(hintText: 'Number of Wasted Items'),
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Please enter a value';
+                  } else {
+                    return null;
+                  }
+                },
+                onSaved: (value) {
+                  wastePost = FoodWastePost(
+                    date: DateTime.now(),
+                    quantity: int.parse(value),
+                    latitude: locationData.latitude,
+                    longitude: locationData.longitude,
+                  );
+                },
+              ),
+              textField: true,
+              onLongPressHint: 'Enter text into this field',
             )));
   }
 
@@ -82,25 +90,8 @@ class NewPostScreenState extends State<NewPostScreen> {
             child: FractionallySizedBox(
                 heightFactor: 0.7,
                 widthFactor: 1,
-                child: Image.file(widget.file))));
-  }
-
-  Widget uploadContainer(GlobalKey<FormState> formKey, BuildContext context) {
-    return Align(
-        //alignment: Alignment(0, 0.9),
-        child: Container(
-            width: double.infinity,
-            height: 50,
-            color: Colors.blue,
-            child: GestureDetector(
-                onTap: () {
-                  if (formKey.currentState.validate()) {
-                    formKey.currentState.save();
-                    // Upload content to firestore
-                    Navigator.of(context).pop();
-                  }
-                },
-                child: Icon(Icons.cloud_upload_outlined, size: 50))));
+                child:
+                    Semantics(child: Image.file(widget.file), image: true))));
   }
 
   Align saveButton(GlobalKey<FormState> formKey, BuildContext context) {

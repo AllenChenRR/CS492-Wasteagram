@@ -37,20 +37,23 @@ class ListStreamState extends State<ListStream> {
                     // TODO: FIX ME FOR EC
                     //listScreenState.updateCount(count);
                   }
-                  return ListTile(
-                    trailing: Text(post['quantity'].toString(),
-                        textDirection: TextDirection.ltr,
-                        style: TextStyle(fontSize: 25)),
-                    title: Text(convertToDate(post['date'])),
-                    onTap: () {
-                      var wastePost = FoodWastePost(
-                          date: post['date'].toDate(),
-                          quantity: post['quantity'],
-                          url: post['url'],
-                          latitude: post['location'].latitude,
-                          longitude: post['location'].longitude);
-                      pushDetailedPostScreen(context, wastePost);
-                    },
+                  return Semantics(
+                    child: ListTile(
+                      trailing: Text(post['quantity'].toString(),
+                          textDirection: TextDirection.ltr,
+                          style: TextStyle(fontSize: 25)),
+                      title: Text(convertToDate(post['date'])),
+                      onTap: () {
+                        var wastePost = FoodWastePost(
+                            date: post['date'].toDate(),
+                            quantity: post['quantity'],
+                            url: post['url'],
+                            latitude: post['location'].latitude,
+                            longitude: post['location'].longitude);
+                        pushDetailedPostScreen(context, wastePost);
+                      },
+                    ),
+                    onLongPressHint: 'Tapping entry will display more details',
                   );
                 });
           } else {
